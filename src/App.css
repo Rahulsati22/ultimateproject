@@ -1,0 +1,12 @@
+*::-webkit-scrollbar {
+  display: none;
+}
+.course {
+  margin-bottom: 1rem;
+  transition: all 0.5s;
+  width: 250px;
+}
+
+.course:hover {
+  transform: translateY(-10px);
+}

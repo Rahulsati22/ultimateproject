@@ -3,7 +3,8 @@ import { Grid, Box, Text, Heading, Stack } from '@chakra-ui/react'
 import Bar from './Bar'
 import SideBar from './SideBar'
 import Databox from './Databox'
-import LineChart from './Chart'
+import Chart from './Chart'
+import DoughnutChart from './DoughnutChart'
 const DashBoard = () => {
     return (
         <Grid minH={'100vh'} templateColumns={['1fr', '5fr 1fr']}>
@@ -27,6 +28,7 @@ const DashBoard = () => {
                         Views Graph
                     </Heading>
                     {/* Line Graph Here */}
+                    <Chart />
                 </Box>
 
                 <Grid templateColumns={['1fr', '2fr 1fr']}>
@@ -42,10 +44,12 @@ const DashBoard = () => {
                         </Box>
                     </Box>
 
-                    <Box p={['0','16']} boxSizing='border-box' py='4'>
-                    <Heading textAlign={'center'} size='md' mb='4' children='Users '/>
+                    <Box p={['0', '16']} boxSizing='border-box' py='4'>
+                        <Heading textAlign={'center'} size='md' mb='4' children='Users ' />
 
-                    {/* Donut Graph */}
+                        {/* Donut Graph */}
+                        {/* <Doughnut /> */}
+                        <DoughnutChart />
                     </Box>
                 </Grid>
             </Box>

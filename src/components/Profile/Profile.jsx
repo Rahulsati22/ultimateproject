@@ -1,33 +1,65 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Avatar, Container, Image, Heading, Stack, VStack, Button, Text, HStack, useDisclosure } from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
 import { RiDeleteBin7Fill } from 'react-icons/ri'
 import ChangePhotoBox from './ChangePhotoBox'
+import { useDispatch, useSelector } from 'react-redux'
+import { removeFromPlayList, updateProfilePicture } from '../../redux/Actions/profile'
+import { cancelSubscription, getMyProfile } from '../../redux/Actions/user'
+import toast from 'react-hot-toast'
 const Profile = () => {
-    const user = {
-        name: "Rahul",
-        email: 'rahulsati9969@gmail.com',
-        poster: 'https://i.pinimg.com/564x/28/21/7a/28217ab678078c79606831ec10f2b456.jpg',
-        createdAt: String(new Date().toISOString()),
-        role: 'user',
-        subscription: {
-            status: 'active',
-        },
-        playlist: [{
-            course: 'ansdkdknfkjsdks',
-            poster: 'https://i.pinimg.com/564x/28/21/7a/28217ab678078c79606831ec10f2b456.jpg'
-        }]
-    }
+    const { message, error, loading } = useSelector((state) => state.profile);
     const { isOpen, onClose, onOpen } = useDisclosure();
+    const {loading:sloading, message:smessage, error:serror} = useSelector((state)=>state.subscription)
+    const dispatch = useDispatch();
+     const cancelSubs = ()=>{
+        dispatch(cancelSubscription()).then(()=>{
+            dispatch(getMyProfile());
+        })
+     }
     const removeFromPlaylistHandler = (id) => {
-
+        dispatch(removeFromPlayList(id)).then(()=>{
+            dispatch(getMyProfile())
+        })
     }
-    const changeSubmitHandler = (e, image) => {
+    const {user} = useSelector((state)=>state.user);
+    const changeSubmitHandler = async (e, image) => {
         e.preventDefault();
-        console.log('changed');
         console.log(image)
-        onClose();
+        const myForm = new FormData();
+        myForm.append("file", image);
+        dispatch(updateProfilePicture(myForm)).then(() => {
+            dispatch(getMyProfile());
+            onClose();
+        })
     }
+
+    useEffect(() => {
+        if (message) {
+            toast.success(message);
+             dispatch({
+                type: "clearMessage"
+            })
+        }
+        if (error) {
+            toast.error(error); 
+            dispatch({
+                type: "clearError"
+            })
+        }
+        if (smessage){
+            toast.success(smessage);
+            dispatch({
+                type : "clearMessage"
+            })
+        }
+        if (serror){
+            toast.error(serror);
+            dispatch({
+                type : "clearError"
+            })
+        }
+    },[dispatch, error, message, smessage, serror])
 
     return (
         <Container minH='95vh' maxW='container.lg' py='8' >
@@ -42,7 +74,7 @@ const Profile = () => {
                 padding={'8'}
             >
                 <VStack>
-                    <Avatar boxSize={'48'} />
+                    <Avatar src={user.avatar.url} boxSize={'48'} />
                     <Button onClick={onOpen} colorScheme='yellow' variant={'ghost'}>
                         Change Photo
                     </Button>
@@ -70,9 +102,9 @@ const Profile = () => {
                                 <Text fontWeight={'bold'}>
                                     Subscription
                                 </Text>
-                                {user.subscription.status === 'active' ?
+                                {user.subscription && user.subscription.status === 'active' ?
                                     (
-                                        <Button variant={'unstyled'} color={'yellow.500'}>Cancel Subscription</Button>
+                                        <Button isLoading={sloading} onClick={cancelSubs} variant={'unstyled'} color={'yellow.500'}>Cancel Subscription</Button>
                                     ) : (
                                         <Link to='/subscribe'>
                                             <Button colorScheme='yellow'>Subscribe</Button>
@@ -112,7 +144,7 @@ const Profile = () => {
                                     </Button>
                                 </Link>
 
-                                <Button onClick={() => removeFromPlaylistHandler(element.course)}>
+                                <Button isLoading={loading} onClick={() => removeFromPlaylistHandler(element.course)}>
                                     <RiDeleteBin7Fill />
                                 </Button>
                             </HStack>
@@ -120,7 +152,7 @@ const Profile = () => {
                     })}
                 </Stack>
             }
-            <ChangePhotoBox changeSubmitHandler={changeSubmitHandler} isOpen={isOpen} onClose={onClose} onOpen={onOpen} />
+            <ChangePhotoBox loading={loading} changeSubmitHandler={changeSubmitHandler} isOpen={isOpen} onClose={onClose} onOpen={onOpen} />
 
         </Container>
     )

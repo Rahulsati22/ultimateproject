@@ -3,7 +3,7 @@ import { Modal, ModalOverlay, ModalHeader, ModalFooter, ModalContent, Input, But
 import { fileUploadCss } from '../Auth/Register'
 
 
-const ChangePhotoBox = ({ isOpen, onClose, changeSubmitHandler }) => {
+const ChangePhotoBox = ({ isOpen, onClose, changeSubmitHandler, loading }) => {
 
     const [image, setImage] = useState("");
     const [imagePreview, setImagePreview] = useState("");
@@ -38,7 +38,7 @@ const ChangePhotoBox = ({ isOpen, onClose, changeSubmitHandler }) => {
                             <VStack spacing={'8'}>
                                 <Avatar boxSize={'48'} src={imagePreview} />
                                 <Input onChange={handleChange} type={'file'} required css={{ "&::file-selector-button": fileUploadCss }} />
-                                <Button type='submit' w='full' colorScheme='yellow'>Change</Button>
+                                <Button isLoading={loading} type='submit' w='full' colorScheme='yellow'>Change</Button>
                             </VStack>
                         </form>
                     </Container>

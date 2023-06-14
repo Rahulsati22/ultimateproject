@@ -3,14 +3,17 @@ import { ColorModeSwitcher } from '../../ColorModeSwitcher'
 import { RiDashboardFill, RiLogoutBoxRLine, RiMenu5Fill } from 'react-icons/ri'
 import { Button, Drawer, HStack, VStack, DrawerOverlay, DrawerBody, DrawerContent, DrawerHeader, DrawerFooter, useDisclosure } from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
-const Header = () => {
+import { useDispatch } from 'react-redux'
+import { getMyProfile, logoutUser } from '../../redux/Actions/user'
+
+const Header = ({ isAuthenticated, user }) => {
     const { onOpen, onClose, isOpen } = useDisclosure();
-    const isAuthenticated = true;
-    const user = {};
+    const dispatch = useDispatch();
     const logoutHandler = () => {
+        dispatch(logoutUser());
         onClose();
     }
-    user.role = 'admin'
+
     return (
         <>
             <ColorModeSwitcher />

@@ -1,74 +1,95 @@
-import React from 'react'
-import { Td, HStack, Button, Grid, Box, Th, Thead, Tr, Heading, TableContainer, TableCaption, Table, Tbody } from '@chakra-ui/react'
+import React, { useEffect } from 'react'
+import { Grid, Box, Th, Thead, Tr, Heading, TableContainer, TableCaption, Table, Tbody } from '@chakra-ui/react'
 import SideBar from './SideBar'
 import Row from './Row'
-import { RiDeleteBin7Fill } from 'react-icons/ri'
+import { useDispatch, useSelector } from 'react-redux'
+import { deleteUser, getAllUsers, updateUser } from '../../redux/Actions/admin'
+import toast from 'react-hot-toast'
 const Users = () => {
+  const dispatch = useDispatch();
+  const { users, loading, error, message } = useSelector((state) => state.admin)
 
-  const users = [{
-    _id: '1234455',
-    name: "rahul sati",
-    email: "rahulsati9969@gmail.com",
-    role: "admin",
-    subscription: {
-      status: 'active'
-    },
+  useEffect(() => {
+    if (message) {
+      toast.success(message)
+      dispatch({
+        type: "clearMessage"
+      })
+    }
+    if (error) {
+      toast.error(error);
+      dispatch({
+        type: "clearError"
+      })
+    }
+    dispatch(getAllUsers());
+  }, [dispatch, message, error])
 
-  }]
-
-  const deleteHandler = ()=>{console.log("I am delete handler")};
-  const updateHandler = ()=>{console.log("I am update handler")};
+  const deleteHandler = (id) => {
+    dispatch(deleteUser(id)).then(() => {
+      dispatch(getAllUsers())
+    })
+  };
+  const updateHandler = (id) => {
+    dispatch(updateUser(id)).then(() => {
+      dispatch(getAllUsers());
+    })
+  };
   return (
-    <Grid minH={'100vh'} templateColumns={['1fr', '5fr 1fr']}>
-      <Box padding={['0', '16']} overflowX={'scroll'}>
-        <Heading textTransform={'uppercase'} my='16' textAlign={['center', 'left']}>
-          All Users
-        </Heading>
+    <>
+      
+         <Grid minH={'100vh'} templateColumns={['1fr', '5fr 1fr']}>
+          <Box padding={['0', '16']} overflowX={'scroll'}>
+            <Heading textTransform={'uppercase'} my='16' textAlign={['center', 'left']}>
+              All Users
+            </Heading>
 
 
-        <TableContainer w={['100vw', 'full']}>
-          <Table variant={'simple'} size={'lg'}>
-            <TableCaption>All available users in the database</TableCaption>
+            <TableContainer w={['100vw', 'full']}>
+              <Table variant={'simple'} size={'lg'}>
+                <TableCaption>All available users in the database</TableCaption>
 
-            <Thead>
-              <Tr>
-                <Th>
-                  Id
-                </Th>
-                <Th>
-                  Name
-                </Th>
-                <Th>
-                  Email
-                </Th>
-                <Th>
-                  Role
-                </Th>
-                <Th>
-                  Subscription
-                </Th>
-                <Th isNumeric>Action</Th>
-              </Tr>
-            </Thead>
+                <Thead>
+                  <Tr>
+                    <Th>
+                      Id
+                    </Th>
+                    <Th>
+                      Name
+                    </Th>
+                    <Th>
+                      Email
+                    </Th>
+                    <Th>
+                      Role
+                    </Th>
+                    <Th>
+                      Subscription
+                    </Th>
+                    <Th isNumeric>Action</Th>
+                  </Tr>
+                </Thead>
 
-            <Tbody>
+                <Tbody>
 
-              {
-                users.map((item, indx) => {
-                  return <Row item={item} key={indx} updateHandler={updateHandler} deleteHandler={deleteHandler} />
-                })
-              }
+                  {
+                    users && users.map((item, indx) => {
+                      return <Row loading={loading} item={item} key={indx} updateHandler={updateHandler} deleteHandler={deleteHandler} />
+                    })
+                  }
 
-            </Tbody>
-          </Table>
-        </TableContainer>
-      </Box>
+                </Tbody>
+              </Table>
+            </TableContainer>
+          </Box>
 
-      <SideBar />
+          <SideBar />
 
-    </Grid>
+        </Grid>
+      
+    </>
   )
 }
 
- 
+
 export default Users

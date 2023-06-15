@@ -1,7 +1,7 @@
 import React from 'react'
 import { Td, Tr, HStack, Button, Image } from '@chakra-ui/react'
 import { RiDeleteBin7Fill } from 'react-icons/ri'
-const Row = ({ item, deleteHandler, onOpen }) => {
+const Row = ({ loading, item, deleteHandler, courseDetailsHandler }) => {
     return (
         <Tr>
             <Td>{item._id}</Td>
@@ -13,8 +13,8 @@ const Row = ({ item, deleteHandler, onOpen }) => {
             <Td isNumeric>{item.numOfVideos}</Td>
             <Td isNumeric>
                 <HStack justifyContent='flex-end'>
-                    <Button onClick={onOpen} variant='outline' color='purple.500'>View Lectures</Button>
-                    <Button color={'purple.600'} onClick={() => deleteHandler(item._id)}><RiDeleteBin7Fill /></Button>
+                    <Button onClick={() => courseDetailsHandler(item._id)} variant='outline' color='purple.500'>View Lectures</Button>
+                    <Button isLoading={loading} color={'purple.600'} onClick={() => deleteHandler(item._id)}><RiDeleteBin7Fill /></Button>
                 </HStack>
             </Td>
         </Tr>

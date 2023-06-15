@@ -1,5 +1,5 @@
 import { createReducer } from "@reduxjs/toolkit";
-const initialState = { courses: [] };
+const initialState = { courses: [], lectures : [] };
 export const courseReducer = createReducer(initialState, {
     allCoursesRequest: (state) => {
         state.loading = true;
@@ -20,6 +20,17 @@ export const courseReducer = createReducer(initialState, {
         state.message = action.payload;
     },
     addToPlayListFailure: (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+    },
+    getCourseRequest : (state)=>{
+        state.loading = true;
+    },
+    getCourseSuccess : (state, action)=>{
+        state.loading = false;
+        state.lectures = action.payload;
+    },
+    getCourseFailure : (state, action)=>{
         state.loading = false;
         state.error = action.payload;
     },

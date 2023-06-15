@@ -49,6 +49,7 @@ const Courses = () => {
     useEffect(() => {
         if (message) { toast.success(message); dispatch({ type: "clearMessage" }) }
         if (error) { toast.error(error); dispatch({ type: "clearError" }) }
+        
         dispatch(getAllCourses(category, keyword))
     }, [category, keyword, dispatch, error, message])
     const addToPlayListHandler = (courseId) => {

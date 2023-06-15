@@ -1,6 +1,10 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Grid, Container,Button, Heading, VStack, Input, Select, Image } from '@chakra-ui/react'
+import toast from 'react-hot-toast'
 import SideBar from './SideBar'
+import { useDispatch, useSelector } from 'react-redux'
+import { addCourse } from '../../redux/Actions/admin'
+import { getAllCourses } from '../../redux/Actions/course'
 const CreateCourse = () => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -8,7 +12,7 @@ const CreateCourse = () => {
   const [category, setCategory] = useState('');
   const [image, setImage] = useState('');
   const [imagePreview, setImagePreview] = useState('')
-  const [] = useState('');
+  const { message: adminMessage, error: adminError } = useSelector((state) => state.admin)
   const categories = [
     'Web Development',
     'Artificial Intelligence',
@@ -26,6 +30,23 @@ const CreateCourse = () => {
       setImage(file)
     }
   }
+  const dispatch = useDispatch();
+  useEffect(()=>{
+    if (adminMessage) { toast.success(adminMessage); dispatch({ type: "clearMessage" }) }
+    if (adminError) { toast.error(adminError); dispatch({ type: 'clearError' }) }
+  })
+
+
+  const submitHandler = (e)=>{
+    e.preventDefault();
+    const myForm = new FormData();
+    myForm.append("title", title);
+    myForm.append("description", description);
+    myForm.append("createdBy", createdBy);
+    myForm.append("category", category);
+    myForm.append("file", image);
+    dispatch(addCourse(myForm)).then(()=>getAllCourses())
+  }
   const fileUploadCss = {
     cursor: 'pointer',
     marginLeft: '-5%',
@@ -38,7 +59,7 @@ const CreateCourse = () => {
   return (
     <Grid minH={'100vh'} templateColumns={['1fr', '5fr 1fr']}>
       <Container py='16'>
-        <form action="">
+        <form onSubmit={submitHandler}>
           <Heading textTransform='uppercase' my='16' textAlign={['center', 'left']}>
             Create Course
           </Heading>
@@ -53,7 +74,7 @@ const CreateCourse = () => {
             <Select focusBorderColor='purple.300' value={category} onChange={(e) => setCategory(e.target.value)}>
               <option value="">Category</option>
               {categories.map((item, indx) => {
-                return <option key={indx} value="item">{item}</option>
+                return <option key={indx} value={item}>{item}</option>
               })}
             </Select>
 

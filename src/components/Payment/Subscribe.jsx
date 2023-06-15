@@ -7,6 +7,7 @@ import toast from 'react-hot-toast'
 import axios from 'axios';
 const Subscribe = ({ user }) => {
     const { subscriptionId, loading, error } = useSelector((state) => state.subscription);
+    const {error:courseError} = useSelector((state)=>state.course)
     const dispatch = useDispatch();
     const [key, setKey] = useState("");
     const subscriptionHandler = async () => {
@@ -20,6 +21,15 @@ const Subscribe = ({ user }) => {
             dispatch({
                 type: "clearError"
             })
+        }
+
+        if (courseError){
+            if (courseError){
+                toast.error(error);
+                dispatch({
+                    type : 'clearError'
+                })
+            }
         }
 
         if (subscriptionId) {
@@ -50,7 +60,7 @@ const Subscribe = ({ user }) => {
             }
             openPopUp();
         }
-    }, [dispatch, error, user.name, user.email, key, subscriptionId])
+    }, [dispatch, error, user.name, user.email, key, subscriptionId, courseError])
     return (
         <Container h='90vh' p='16'>
             <Heading children='Welcome' my='8' textAlign='center' />

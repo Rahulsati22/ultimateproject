@@ -1,8 +1,8 @@
-import { ModalCloseButton, ModalOverlay, Modal, ModalContent, ModalHeader, ModalBody, Input, background } from '@chakra-ui/react'
+import { ModalCloseButton, ModalOverlay, Modal, ModalContent, ModalHeader, ModalBody, Input } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import { Grid, Box, Heading, VStack, Button, ModalFooter } from '@chakra-ui/react'
 import VideoCard from './VideoCard'
-const CourseModal = ({ lectures, courseTitle, isOpen, onClose, id, deleteButtonHandler, addButtonHandler }) => {
+const CourseModal = ({loading, lectures, courseTitle, isOpen, onClose, id, deleteButtonHandler, addButtonHandler }) => {
     // title, description, video
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
@@ -58,7 +58,10 @@ const CourseModal = ({ lectures, courseTitle, isOpen, onClose, id, deleteButtonH
                                 Lectures
                             </Heading>
 
-                            <VideoCard id='123445' addButtonHandler={addButtonHandler} title={'React Intro'} description={'This is an intro lecture'} num={1} lectureId={'1234'} courseId={'abcd'} deleteButtonHandler={deleteButtonHandler} />
+                           { lectures.map((elem, indx)=>{
+                                return <VideoCard id={elem._id} addButtonHandler={addButtonHandler} title={elem.title} description={elem.description} num={indx+1} lectureId={elem._id} courseId={id} deleteButtonHandler={deleteButtonHandler} />
+                            })}
+                            
                         </Box>
 
                         <Box>
@@ -87,7 +90,7 @@ const CourseModal = ({ lectures, courseTitle, isOpen, onClose, id, deleteButtonH
                                         )
                                     }
 
-                                    <Button width='full' colorScheme='purple' type='submit'>
+                                    <Button isLoading={loading} width='full' colorScheme='purple' type='submit'>
                                         Upload
                                     </Button>
 

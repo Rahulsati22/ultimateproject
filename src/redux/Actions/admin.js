@@ -114,42 +114,62 @@ export const getAllUsers = () => async (dispatch) => {
     }
 }
 
-export const deleteUser = (id)=>async (dispatch)=>{
+export const deleteUser = (id) => async (dispatch) => {
     try {
         dispatch({
-            type : "deleteUserRequest"
+            type: "deleteUserRequest"
         })
 
-        const {data} = await axios.delete(`${server}/admin/user/${id}`, {withCredentials:true})
+        const { data } = await axios.delete(`${server}/admin/user/${id}`, { withCredentials: true })
 
         dispatch({
-            type : "deleteUserSuccess",
-            payload : data.message
+            type: "deleteUserSuccess",
+            payload: data.message
         })
     } catch (error) {
         dispatch({
-            type : "deleteUserFailure",
-            payload : error.response.data.message
+            type: "deleteUserFailure",
+            payload: error.response.data.message
         })
     }
 }
 
-export const updateUser = (id) => async (dispatch) =>{
+export const updateUser = (id) => async (dispatch) => {
     try {
         dispatch({
-            type : "updateUserRequest"
+            type: "updateUserRequest"
         })
 
-        const {data} = await axios.put(`${server}/admin/user/${id}`,{},{withCredentials:true})
+        const { data } = await axios.put(`${server}/admin/user/${id}`, {}, { withCredentials: true })
 
         dispatch({
-            type : "updateUserSuccess",
-            payload : data.message
+            type: "updateUserSuccess",
+            payload: data.message
         })
     } catch (error) {
         dispatch({
-            type : "updateUserFailure",
-            payload : error.response.data.message
+            type: "updateUserFailure",
+            payload: error.response.data.message
+        })
+    }
+}
+
+export const getStats = () => async (dispatch) => {
+    try {
+        dispatch({
+            type: "getAdminStatsRequest"
+        })
+
+        const { data } = await axios.get(`${server}/admin/stats`, { withCredentials: true });
+
+        dispatch({
+            type: "getAdminStatsSuccess",
+            payload: data
+        })
+    } catch (error) {
+        dispatch({
+            type: "getAdminStatsFailure",
+            payload: error.response.data.message
         })
     }
 }

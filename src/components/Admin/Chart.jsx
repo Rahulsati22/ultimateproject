@@ -60,14 +60,14 @@ function getLastYearMonths() {
 
 }
 
-const Chart = () => {
+const Chart = ({stats}) => {
     const labels = getLastYearMonths();
     const data = {
         labels,
         datasets: [
             {
                 label: "Views",
-                data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
+                data: [stats[0].views, stats[1].views, stats[2].views, stats[3].views, stats[4].views, stats[5].views, stats[6].views, stats[7].views, stats[8].views, stats[9].views, stats[10].views, stats[11].views],
                 borderColor: 'rgba(107,70,193,0.5)',
                 backgroundColor: '#6b46c1'
             }

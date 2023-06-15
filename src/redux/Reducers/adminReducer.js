@@ -4,6 +4,27 @@ export const adminReducer = createReducer({}, {
     createCourseRequest: (state) => {
         state.loading = true;
     },
+    getAdminStatsRequest : (state)=>{
+        state.loading = true;
+    },
+    getAdminStatsSuccess : (state, action)=>{
+        state.loading = false;
+        state.stats = action.payload.stats;
+        state.usersCount = action.payload.usersCount;
+        state.subscriptionsCount = action.payload.subscriptionsCount;
+        state.viewsCount = action.payload.viewsCount;
+        state.usersPercentage = action.payload.usersPercentage;
+        state.subscriptionsPercentage = action.payload.subscriptionsPercentage;
+        state.viewsPercentage = action.payload.viewsPercentage;
+        state.usersProfit = action.payload.usersProfit;
+        state.subscriptionsProfit = action.payload.subscriptionsProfit;
+        state.viewsProfit = action.payload.viewsProfit;
+        state.user2Count = action.payload.user2Count
+    },
+    getAdminStatsFailure : (state, action)=>{
+        state.loading = false;
+        state.error = action.payload;
+    },
     createCourseSuccess: (state, action) => {
         state.loading = false;
         state.message = action.payload;

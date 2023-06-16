@@ -14,6 +14,6 @@ const store = configureStore({
     }
 })
 
-export const server = `http://localhost:8000/api/v1`
+export const server = `https://ultimate-project-backend.vercel.app/api/v1`
 
 export default store;
